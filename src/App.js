@@ -1,10 +1,9 @@
-import Login from './components/Login'; 
+import Login from './components/User/Login'; 
 
 function App() {
   return (
     <div>
-      <h2>Let's get started!</h2>
-      <p>can you see me?</p>
+      <h2>Plant Scheduler</h2>
       <Login></Login>
     </div>
   );

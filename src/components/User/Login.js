@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'; 
 import "firebase/auth"; 
-import fire from './config'; 
+import fire from "../Firebase/config"; 
 import "./Login.css"; 
 import Home from '../Homepage/homepage'; 
+//import db from '../Firebase/db'; 
 
 const Login = () => { 
   const [currentUser, setCurrentUser] = useState(''); 
@@ -62,7 +63,8 @@ const Login = () => {
           default:
             authListener(); 
         }
-    });  
+    });    
+    
   };
 
 
@@ -74,7 +76,8 @@ const Login = () => {
     fire.auth().onAuthStateChanged(user => { 
         if(user) { 
           setCurrentUser(user); 
-          console.log(currentUser); 
+
+
         } else { 
           setCurrentUser(""); 
         }
@@ -96,10 +99,14 @@ const Login = () => {
   return (
       <div> 
         {currentUser ? (
-          <Home logoutHandler={LogoutHandler} />
+          <div>
+              <Home logoutHandler={LogoutHandler} currID={currentUser.uid} />
+            </div> 
+   
         ) : 
             (
           <form>
+           
           <div className="login-style">
             <label>Username</label>
             <input type="email" id="username" onChange={emailHandler}/>
@@ -123,8 +130,6 @@ const Login = () => {
         </form>
 
         )}
-       
-      
       </div>
        
      

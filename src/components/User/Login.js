@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'; 
+import ReactDOM from 'react-dom'; 
 import "firebase/auth"; 
 import fire from "../Firebase/config"; 
 import "./Login.css"; 
-import Home from '../Homepage/homepage'; 
-//import db from '../Firebase/db'; 
+import db from '../Firebase/db'; 
+import PlantList from '../PlantList/PlantList';
 
 const Login = () => { 
   const [currentUser, setCurrentUser] = useState(''); 
@@ -12,6 +13,9 @@ const Login = () => {
   const [hasAccount, setHasAccount] = useState(true); 
   const [emailError, setEmailError] = useState(''); 
   const [passwordError, setPasswordError] = useState(''); 
+  //const [Feed, setFeed] = useState(''); 
+  const rendered = []; 
+
 
   const emailHandler = (event) => { 
     setEmail(event.target.value); 
@@ -70,23 +74,37 @@ const Login = () => {
 
   const LogoutHandler = () => { 
     fire.auth().signOut(); 
+    setCurrentUser((prevState) => {
+      return {...prevState, currentUser: ""}
+    }); 
   };
 
   const authListener = () => { 
     fire.auth().onAuthStateChanged(user => { 
         if(user) { 
           setCurrentUser(user); 
-
-
+          GetFeed(); 
+          console.log(currentUser);
         } else { 
           setCurrentUser(""); 
         }
-       
     })
   };
 
+  async function GetFeed() { 
+    var user = db.collection('users').doc(currentUser.uid); 
+      await user.collection('plants').get().then(snapshot => { 
+       if (!snapshot.empty) {  
+          snapshot.forEach(doc => rendered.push(doc.data()));  
+          ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#homepage")); 
+       }   
+        }
+    ); 
+  }; 
+
   useEffect(() => {  //not sure if this needs to be here 
     authListener(); 
+    
   });
 
   const toggleSettings = () => { 
@@ -97,10 +115,11 @@ const Login = () => {
   
 
   return (
+       
       <div> 
-        {currentUser ? (
-          <div>
-              <Home logoutHandler={LogoutHandler} currID={currentUser.uid} />
+        {currentUser ? ( 
+          <div id="homepage">  
+
             </div> 
    
         ) : 

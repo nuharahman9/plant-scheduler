@@ -1,17 +1,17 @@
 import React from 'react'; 
 import Navbar from '../Nav/navbar'; 
+//import db from '../Firebase/db'; 
 
 function PlantList(props) {
-  //  const[rendered, setRendered] = useState(''); 
-    //if (!rendered.empty) {
-      //setRendered(props.rendered); 
-   // }
+  
+    const rendered = props.rendered; 
 
+   
     return (
       <div>
-        <Navbar logoutHandler={props.LogoutHandler}/> 
+        <Navbar logoutHandler={props.LogoutHandler} length={rendered.length}/> 
       <ul>
-        {props.rendered.map((doc) => 
+        {rendered.map((doc) => 
           <div key={doc.id}>
         <img src={doc.photo} alt=""/> 
         <p>name: {doc.name}

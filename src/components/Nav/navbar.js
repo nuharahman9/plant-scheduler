@@ -1,18 +1,16 @@
 //import React, {useEffect } from 'react'; 
-//import db from '../Firebase/db'
+//import db from '../Firebase/db; 
+import AddPlant from './AddPlant'; 
 
-const Navbar = ({ logoutHandler, addPlantPopup }) => { 
- // const [feed, setFeed] = useState(false); 
- // const uid = currID.toString(); 
-  //const rendered = []; 
-
+const Navbar = ({ logoutHandler, length }) => { 
 
   return ( 
     <div> 
       <button onClick={logoutHandler}>Log out</button>
-      <button onClick={addPlantPopup}>+ New Plant</button> 
+      <AddPlant size={length+1} /> 
+      
+
     </div>
-   
   )
 }
 

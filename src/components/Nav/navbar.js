@@ -1,15 +1,13 @@
 //import React, {useEffect } from 'react'; 
 //import db from '../Firebase/db; 
+//mport PlantList from '../PlantList/PlantList'; 
 import AddPlant from './AddPlant'; 
 
-const Navbar = ({ logoutHandler, length }) => { 
-
+const Navbar = (props) => { 
   return ( 
     <div> 
-      <button onClick={logoutHandler}>Log out</button>
-      <AddPlant size={length+1} /> 
-      
-
+      <button onClick={props.logoutHandler}>Log out</button>
+      <AddPlant onNewPlant={props.changeState} size={props.length + 1} /> 
     </div>
   )
 }

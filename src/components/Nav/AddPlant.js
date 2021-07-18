@@ -2,23 +2,28 @@ import Popup from 'reactjs-popup';
 import React, { useState } from 'react'; 
 import './popup.css'; 
 import db from '../Firebase/db'; 
-import fire from '../Firebase/config'; 
+import fire, { storage } from '../Firebase/config'; 
 
 const AddPlant = (props) => { 
   const [newPlant, setNewPlant] = useState({
-    id: props.size,
+    id: '',
     name: '',
     species: '',
     lastwatered: '',
     wateringfrequency: '',
-    notes: ''
+    notes: '',
+    photo: ''
 
   }); 
+
+  const [file, setFile] = useState(null); 
+  const storageRef = storage.ref(); 
 
   const nameHandler = (e) => {
     setNewPlant({
       ...newPlant, 
       name: e.target.value, 
+      id: props.size
     })
   }; 
   const speciesHandler = (e) => {
@@ -38,12 +43,17 @@ const AddPlant = (props) => {
       ...newPlant, 
       lastwatered: e.target.value
     })
-  }
+  }; 
   const frequencyHandler = (e) => {
     setNewPlant({
       ...newPlant, 
       wateringfrequency: e.target.value
     })
+  }; 
+  const fileHandler = (e) => { 
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]); 
+    }
   }
 
   const clearFields = () => { 
@@ -53,16 +63,37 @@ const AddPlant = (props) => {
       lastwatered: '',
       wateringfrequency: '',
       notes: '',
-      id: ''
+      id: '',
+      photo: ''
     }); 
+    setFile(null); 
+  }
+
+  async function uploadFile() { 
+    console.log('upload');
+    const fileRef = storageRef.child(file.name); 
+    fileRef.put(file).then(() => {  
+      storageRef.child(file.name).getDownloadURL().then(url => {
+        console.log(url)
+        setNewPlant({
+          ...newPlant, 
+          photo: url
+        })
+        addPlant(); 
+      }).catch((err) => {
+        console.log(err); 
+      });
+    })
+
   }
 
 
   async function addPlant() { 
-    let uid = fire.auth().currentUser.uid; 
+    console.log(newPlant); 
+    let uid = fire.auth().currentUser.uid;
     const user =  db.collection('users').doc(uid);
     await user.collection('plants').doc(newPlant.id.toString()).set(newPlant); 
-    clearFields(); 
+    props.onNewPlant(newPlant); 
 
   }
   //don't forget image field 
@@ -85,7 +116,8 @@ const AddPlant = (props) => {
           {" "}
           <form onSubmit={(e) => { 
             e.preventDefault(); 
-            addPlant(e); 
+            uploadFile(); 
+         //   addPlant(); 
             close();
           } 
           }>
@@ -94,7 +126,7 @@ const AddPlant = (props) => {
              <input type="date" placeholder="Date last watered" id="date" onBlur={dateHandler}/> 
              <input type="number" placeholder="Watering frequency" id="frequency" onBlur={frequencyHandler}/> 
              <input placeholder="notes" id="notes" onBlur={notesHandler} /> 
-        
+              <input type="file" onChange={fileHandler}/>
              <button type="submit">Submit</button>
           </form>
         </div>

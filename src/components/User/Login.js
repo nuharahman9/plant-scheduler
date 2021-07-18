@@ -96,8 +96,8 @@ const Login = () => {
       await user.collection('plants').get().then(snapshot => { 
        if (!snapshot.empty) {  
           snapshot.forEach(doc => rendered.push(doc.data()));  
-          ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#homepage")); 
-       }   
+          ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#plantList")); 
+       }
         }
     ); 
   }; 
@@ -119,7 +119,9 @@ const Login = () => {
       <div> 
         {currentUser ? ( 
           <div id="homepage">  
+            <div id="plantList">
 
+            </div>
             </div> 
    
         ) : 

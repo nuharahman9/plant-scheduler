@@ -12,12 +12,10 @@ const AddPlant = (props) => {
     lastwatered: '',
     wateringfrequency: '',
     notes: '',
-    photo: ''
 
   }); 
-
+  
   const [file, setFile] = useState(null); 
-  const storageRef = storage.ref(); 
 
   const nameHandler = (e) => {
     setNewPlant({
@@ -54,7 +52,9 @@ const AddPlant = (props) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]); 
     }
-  }
+  }; 
+
+
 
   const clearFields = () => { 
     setNewPlant({
@@ -69,34 +69,48 @@ const AddPlant = (props) => {
     setFile(null); 
   }
 
-  async function uploadFile() { 
-    console.log('upload');
-    const fileRef = storageRef.child(file.name); 
-    fileRef.put(file).then(() => {  
-      storageRef.child(file.name).getDownloadURL().then(url => {
-        console.log(url)
-        setNewPlant({
-          ...newPlant, 
-          photo: url
-        })
-        addPlant(); 
-      }).catch((err) => {
-        console.log(err); 
-      });
-    })
-
-  }
-
-
-  async function addPlant() { 
-    console.log(newPlant); 
+  async function uploadPlant(prop) { 
+      const plant = { 
+        wateringfrequency: newPlant.wateringfrequency, 
+        photo: prop, 
+        notes: newPlant.notes, 
+        name: newPlant.name, 
+        id: newPlant.id, 
+        species: newPlant.species, 
+        lastwatered: newPlant.lastwatered
+      }
     let uid = fire.auth().currentUser.uid;
     const user =  db.collection('users').doc(uid);
-    await user.collection('plants').doc(newPlant.id.toString()).set(newPlant); 
-    props.onNewPlant(newPlant); 
-
+    await user.collection('plants').doc(newPlant.id.toString()).set(plant).then(() => {
+     props.onNewPlant(plant); 
+    });  
+  
   }
-  //don't forget image field 
+
+  const fileUpload = () => {
+    const uploadTask = storage.ref().child(file.name).put(file);
+    uploadTask.on('state_changed',  
+      snapshot => {}, 
+      (error) => {
+        console.log(error); 
+      }, 
+      () => {
+        storage.ref().child(file.name).getDownloadURL().then( url => {
+          uploadPlant(url); 
+        })
+      }
+    )
+  }; 
+
+
+   function addPlant() { 
+     if (file !== null) { 
+       fileUpload(); 
+     } else { 
+      let defaultImg = "https://firebasestorage.googleapis.com/v0/b/plant-scheduler.appspot.com/o/default.jpeg?alt=media&token=47cdb8dd-d74c-4100-9f30-f8647d10096e"; 
+       uploadPlant(defaultImg); 
+     }
+  }
 
   return (  
     <Popup
@@ -116,8 +130,7 @@ const AddPlant = (props) => {
           {" "}
           <form onSubmit={(e) => { 
             e.preventDefault(); 
-            uploadFile(); 
-         //   addPlant(); 
+             addPlant(); 
             close();
           } 
           }>

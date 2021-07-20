@@ -1,31 +1,61 @@
 import React, { useState } from 'react'; 
 import Navbar from '../Nav/navbar'; 
-//import db from '../Firebase/db'; 
 import EditPlant from './EditPlant'; 
 
 function PlantList(props) {
-
     const [render, setRender] = useState(false); 
     const rendered = props.rendered; 
-    function removeFeed(name) { 
-      let index = rendered.findIndex(i => i.name === name); 
+    const [alert, setAlert] = useState({
+      classes: '', 
+      name: ''
+    });
+
+    function removeFeed(nm) { 
+      let index = rendered.findIndex(i => i.name === nm); 
       rendered.splice(index, 1); 
-      setRender(!render); 
+      let props = {
+        classes: '', 
+        messages: nm + " was successfully deleted."
+      }; 
+      triggerAlert(props); 
+      
     }
 
     function editFeed(doc) {
       rendered[doc.id - 1] = doc; //change id's. 
-      setRender(!render); 
+      let props = { 
+        classes: '', 
+        message: "Successfully edited " + doc.name + "."
+      }
+      triggerAlert(props); 
     }
-    function setFeed(data) { 
+    
+    function addFeed(data) { 
       rendered.push(data); 
       setRender(!render); 
     }; 
 
+    function triggerAlert(al) { 
+      if (al) {
+        setAlert({
+          message: al.message, 
+          classes: al.classes
+      }); 
+      console.log(alert); 
+      setTimeout(function(){ setAlert({
+        message: '', 
+        classes: ''
+      }); }, 4000);
+    }
+    }
 
     return (
       <div>
-        <Navbar logoutHandler={props.LogoutHandler} length={rendered.length} changeState={setFeed}/> 
+        <div>
+        <Navbar logoutHandler={props.LogoutHandler} length={rendered.length} changeState={addFeed}  /> 
+        </div>
+        <p className={alert.classes} value={alert}>{alert.message}</p>
+
       <ul>
         {rendered.map((doc, ind) => 
           <div key={ind} value={doc.id}>
@@ -35,7 +65,7 @@ function PlantList(props) {
           notes: {doc.notes}, 
           water every {doc.wateringfrequency} days. 
         </p>
-        <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed}/> 
+        <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} /> 
              </div>)}
       </ul>
 

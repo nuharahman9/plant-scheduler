@@ -66,7 +66,20 @@ function PlantList(props) {
     }
     }; 
 
- 
+    function WateringAlert(props) {
+      if (props.num === 0) { 
+        return <p>just in time! make sure to water that thang today girl</p>
+      } else if (props.num < 0) { 
+        if (props.num === -1) { return <p>Fuck bro ur killing ur plant!!! it's been like {props.num.toString() * -1} day! go!</p>}
+        return <p>Fuck bro ur killing ur plant!!! it's been like {props.num.toString() * -1} days! go!</p>
+      } else if (props.num === 1) { 
+        return <p>You next watering is tomorrow.</p>
+      }
+       else { 
+       return <p>Your next watering is in ${props.num.toString()} days.</p>
+      }
+    }; 
+
 
     return (
       <div value={rendered}>
@@ -84,7 +97,7 @@ function PlantList(props) {
           notes: {doc.notes}, 
           last watered on {doc.lastwatered}; 
         </p>
-        <p value={doc}> Water in {doc.nextwatering.toString()} days. </p>
+        <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
         <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} /> 
              </div>)}
       </ul>

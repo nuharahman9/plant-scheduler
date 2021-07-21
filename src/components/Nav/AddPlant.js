@@ -16,7 +16,6 @@ const AddPlant = (props) => {
   
   const [file, setFile] = useState(null); 
 
-
   const nameHandler = (e) => {
     setNewPlant({
       ...newPlant, 
@@ -90,7 +89,6 @@ const AddPlant = (props) => {
     const user =  db.collection('users').doc(uid);
     await user.collection('plants').doc(newPlant.id.toString()).set(plant).then(() => {
      props.onNewPlant(plant); 
-     console.log(plant); 
     });  
   
   }

@@ -37,10 +37,9 @@ const EditPlant = (props) => {
   }; 
   const dateHandler = (e) => {
     if (plant.lastWatered !== e.target.value && e.target.value !== null) { 
-      let arr = e.target.value.split('-'); 
       setPlant({
         ...plant, 
-        lastWatered: arr
+        lastWatered: e.target.value
       });
     }
   }; 

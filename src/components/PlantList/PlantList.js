@@ -8,22 +8,33 @@ function PlantList(props) {
       classes: '', 
       name: ''
     });
-    const rendered = props.rendered; 
+    let rendered = props.rendered; 
+
+    function updateWatering(doc, ind) { 
+        const msec = Date.parse(doc.lastwatered) + (doc.wateringfrequency * 86400000); 
+        const offset = new Date().getTimezoneOffset() * 60000; 
+        let nextwater = (Math.ceil(( (msec) - (Date.now()) + offset) / 86400000)); 
+        console.log(nextwater); 
+        doc = { 
+          ...doc, 
+          nextwatering: nextwater
+        }; 
+        rendered[ind] = doc; 
+        setRender(!render); 
+    }
 
     function removeFeed(nm) { 
       let index = rendered.findIndex(i => i.name === nm); 
       rendered.splice(index, 1); 
-      setRender(!render); 
       let props = {
         classes: '', 
         messages: nm + " was successfully deleted."
       }; 
       triggerAlert(props); 
-      
     }
 
     function editFeed(doc) {
-      rendered[doc.id - 1] = doc; //change id's. 
+      updateWatering(doc, doc.id - 1); 
       let props = { 
         classes: '', 
         message: "Saved changes to " + doc.name + "."
@@ -33,7 +44,7 @@ function PlantList(props) {
     
     function addFeed(data) { 
       rendered.push(data); 
-    //  setRender(!render); 
+      updateWatering(data, (rendered.length - 1)); 
       let props = { 
         classes: '', 
         message: "Successfully added " + data.name + "."

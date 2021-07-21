@@ -95,7 +95,19 @@ const Login = () => {
     var user = db.collection('users').doc(currentUser.uid); 
       await user.collection('plants').get().then(snapshot => { 
        if (!snapshot.empty) {  
-          snapshot.forEach(doc => rendered.push(doc.data()));  
+          snapshot.forEach(plant => {
+              let doc = plant.data(); 
+              const msec = Date.parse(doc.lastwatered) + (doc.wateringfrequency * 86400000); 
+              const offset = new Date().getTimezoneOffset() * 60000; 
+              let nextwater = (Math.ceil(( (msec) - (Date.now()) + offset) / 86400000)); 
+              console.log(nextwater); 
+              doc = { 
+                ...doc, 
+                nextwatering: nextwater
+              }
+              rendered.push(doc); 
+          }); 
+        
           ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#plantList")); 
        }
         }

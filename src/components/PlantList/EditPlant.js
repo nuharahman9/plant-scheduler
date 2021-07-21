@@ -37,10 +37,11 @@ const EditPlant = (props) => {
   }; 
   const dateHandler = (e) => {
     if (plant.lastWatered !== e.target.value && e.target.value !== null) { 
+      let arr = e.target.value.split('-'); 
       setPlant({
         ...plant, 
-        lastWatered: e.target.value
-      })
+        lastWatered: arr
+      });
     }
   }; 
 
@@ -72,18 +73,18 @@ const EditPlant = (props) => {
   }; 
 
   function clearFields() { 
-    setPlant({
-      id: '',
-      name: '',
-      species: '',
-      lastWatered: '',
-      wateringFrequency: '',
-      notes: '',
-      photo: ''
-    })
-    setFile(null);  
-    setDel(false); 
-  }; 
+   // setPlant({
+     // id: '',
+     // name: '',
+     // species: '',
+     // lastWatered: '',
+     // wateringFrequency: '',
+     // notes: '',
+     // photo: ''
+   // })
+   // setFile(null);  
+     setDel(false); 
+   }; 
 
   function edit() { 
     if (del) { 
@@ -137,6 +138,7 @@ const EditPlant = (props) => {
       name: plant.name, 
       species: plant.species, 
       lastwatered: plant.lastWatered, 
+      nextwatering: 0, 
       notes: plant.notes, 
       photo: link,
       wateringfrequency: plant.wateringFrequency

@@ -12,10 +12,10 @@ const AddPlant = (props) => {
     lastwatered: '',
     wateringfrequency: -1,
     notes: '',
-
   }); 
   
   const [file, setFile] = useState(null); 
+
 
   const nameHandler = (e) => {
     setNewPlant({
@@ -40,7 +40,8 @@ const AddPlant = (props) => {
     setNewPlant({
       ...newPlant, 
       lastwatered: e.target.value
-    })
+    });
+
   }; 
   const frequencyHandler = (e) => {
     setNewPlant({
@@ -60,7 +61,12 @@ const AddPlant = (props) => {
     setNewPlant({
       name: '', 
       species: '', 
-      lastwatered: '',
+      lastwatered: '', 
+      nextwatering: {
+        year: '',
+        month: '', 
+        day: ''
+      },
       wateringfrequency: '',
       notes: '',
       id: '',
@@ -76,6 +82,7 @@ const AddPlant = (props) => {
         notes: newPlant.notes, 
         name: newPlant.name, 
         id: newPlant.id, 
+        nextwatering: 0, 
         species: newPlant.species, 
         lastwatered: newPlant.lastwatered
       }
@@ -83,6 +90,7 @@ const AddPlant = (props) => {
     const user =  db.collection('users').doc(uid);
     await user.collection('plants').doc(newPlant.id.toString()).set(plant).then(() => {
      props.onNewPlant(plant); 
+     console.log(plant); 
     });  
   
   }
@@ -136,7 +144,7 @@ const AddPlant = (props) => {
           }>
             <input placeholder="Name" id="name" onBlur={nameHandler}/>
             <input placeholder="Species" id="species" onBlur={speciesHandler}/>
-             <input type="date" placeholder="Date last watered" id="date" onBlur={dateHandler}/> 
+             <input type="date" placeholder="Date last watered" id="date" onChange={dateHandler}/> 
              <input type="number" placeholder="Watering frequency" id="frequency" onBlur={frequencyHandler}/> 
              <input placeholder="notes" id="notes" onBlur={notesHandler} /> 
               <input type="file" onChange={fileHandler}/>

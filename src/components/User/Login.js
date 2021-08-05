@@ -73,10 +73,10 @@ const Login = () => {
 
 
   const LogoutHandler = () => { 
-    fire.auth().signOut(); 
-    setCurrentUser((prevState) => {
-      return {...prevState, currentUser: ""}
-    }); 
+    fire.auth().signOut().then(() => {
+      ReactDOM.unmountComponentAtNode(document.getElementById("home")); 
+      authListener(); 
+    })
   };
 
   const authListener = () => { 
@@ -107,14 +107,20 @@ const Login = () => {
               }
               rendered.push(doc); 
           }); 
-        
-          ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#plantList")); 
+          ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#home")); 
+     //     console.log('element'); 
        }
+       else { 
+        rendered.push(0);  
+        ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#home")); 
+
+       }
+
         }
     ); 
   }; 
 
-  useEffect(() => {  //not sure if this needs to be here 
+  useEffect(() => {  
     authListener(); 
     
   });
@@ -130,18 +136,13 @@ const Login = () => {
        
       <div> 
         {currentUser ? ( 
-          <div id="homepage">  
-            <div id="plantList">
-
-            </div>
-            </div> 
-   
+          <div></div> 
         ) : 
             (
           <form>
            
           <div className="login-style">
-            <label>Username</label>
+            <label>Email</label>
             <input type="email" id="username" onChange={emailHandler}/>
             <label>Password</label>
             <input type="password" id="pass" onChange={passwordHandler} required value={enteredPassword}/>

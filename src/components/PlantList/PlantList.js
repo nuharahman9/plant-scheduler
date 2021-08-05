@@ -79,36 +79,43 @@ function PlantList(props) {
        return <p>Your next watering is in ${props.num.toString()} days.</p>
       }
     }; 
-
+    console.log(rendered); 
 
     return (
-      <div value={rendered}>
+      <div>
         <div>
         <Navbar logoutHandler={props.LogoutHandler} length={rendered.length} changeState={addFeed}  /> 
         </div>
         <p className={alert.classes} value={alert}>{alert.message}</p>
 
       <ul>
-        {rendered.map((doc, ind) => 
-          <div key={ind} value={doc}>
-        <img src={doc.photo} alt="" width="500" height="500" />
-        <p>name: {doc.name}
-          , species: {doc.species}, 
-          notes: {doc.notes}, 
-          last watered on {doc.lastwatered}; 
-        </p>
-        <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
-        <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} /> 
-             </div>)}
+        {rendered[0] === 0 ? (
+          <p>
+            click '+ New plant' to get started. 
+          </p>
+
+        ) : ( 
+          rendered.map((doc, ind) => 
+            <div key={ind} value={doc}>
+          <img src={doc.photo} alt="" width="500" height="500" />
+          <p>name: {doc.name}
+            , species: {doc.species}, 
+            notes: {doc.notes}, 
+            last watered on {doc.lastwatered}; 
+          </p>
+          <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
+          <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} /> 
+               </div>)
+
+        )}
+ 
       </ul>
 
       </div>
       
     );
- 
 
 }; 
-
 
 
 export default PlantList;  

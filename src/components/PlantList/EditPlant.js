@@ -142,7 +142,6 @@ const EditPlant = (props) => {
       photo: link,
       wateringfrequency: plant.wateringFrequency
     }
-    console.log('doc', doc); 
 
     plantRef.set(doc, { merge: true }).then(() => {
       clearFields(); 

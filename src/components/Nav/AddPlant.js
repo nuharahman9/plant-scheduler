@@ -61,11 +61,7 @@ const AddPlant = (props) => {
       name: '', 
       species: '', 
       lastwatered: '', 
-      nextwatering: {
-        year: '',
-        month: '', 
-        day: ''
-      },
+      nextwatering: '', 
       wateringfrequency: '',
       notes: '',
       id: '',

@@ -4,6 +4,7 @@
 import AddPlant from './AddPlant'; 
 
 const Navbar = (props) => { 
+
   return ( 
     <div> 
       <button onClick={props.logoutHandler}>Log out</button>

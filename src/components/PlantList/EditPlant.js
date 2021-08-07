@@ -154,7 +154,7 @@ const EditPlant = (props) => {
 
   return (  
     <Popup
-    trigger={<button className="button">edit info </button>}
+    trigger={<button className="edit">edit info </button>}
     modal nested>
     {close => (
       <div className="popup">

@@ -85,21 +85,20 @@ function PlantList(props) {
     
 
     return (
-      <div id="list">
+      <div>
         <div>
         <Navbar logoutHandler={props.LogoutHandler} length={rendered.length} changeState={addFeed}  /> 
         </div>
         <p className={alert.classes} value={alert}>{alert.message}</p>
 
-      <ul>
+      <div id="list">
         {rendered[0] === 0 ? (
           <p>
             click '+ New plant' to get started. 
           </p>
-
         ) : ( 
           rendered.map((doc, ind) => 
-            <div key={ind} value={doc}>
+            <div key={ind} value={doc} className="card"> 
           <img src={doc.photo} alt="" width="500" height="500" />
           <p>{doc.name} </p>
           <p>
@@ -114,15 +113,14 @@ function PlantList(props) {
                 additional notes: {doc.notes}
               </p>
             ): (null)}
-       
           
           <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
-          <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} index={ind} /> 
+          <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} index={ind} className="edit"/> 
                </div>)
 
         )}
  
-      </ul>
+      </div>
 
       </div>
       

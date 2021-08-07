@@ -1,0 +1,23 @@
+#list { 
+  display: grid; 
+  width: 100%; 
+  grid-template-columns: 40% 40%;
+  margin: 0 auto; 
+  justify-content: center;
+  gap: 20px;
+}
+
+.card { 
+  border: 5px solid #6a4d3e; 
+  overflow: hidden;
+  text-align: center;
+  padding: 4px; 
+  border-radius: 14px;
+  font-family: 'Montserrat'; 
+}
+
+.edit { 
+  width: 50%; 
+  margin: 0 auto;
+  font-size: 15px;
+}

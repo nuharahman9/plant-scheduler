@@ -23,18 +23,20 @@ function PlantList(props) {
         setRender(!render); 
     }
 
-    function removeFeed(nm) { 
-      let index = rendered.findIndex(i => i.name === nm); 
-      rendered.splice(index, 1); 
+    function removeFeed(id, name) { 
       let props = {
         classes: '', 
-        messages: nm + " was successfully deleted."
+        messages: name + " was successfully deleted."
       }; 
       triggerAlert(props); 
+      console.log(name); 
+      let index = rendered.findIndex(i => i.id === id); 
+      rendered.splice(index, 1); 
     }
 
-    function editFeed(doc) {
-      updateWatering(doc, doc.id - 1); 
+    function editFeed(doc, index) {
+      console.log(doc); 
+      updateWatering(doc, index); 
       let props = { 
         classes: '', 
         message: "Saved changes to " + doc.name + "."
@@ -53,12 +55,12 @@ function PlantList(props) {
     }; 
 
     function triggerAlert(al) { 
+      console.log('alert'); 
       if (al) {
         setAlert({
           message: al.message, 
           classes: al.classes
       }); 
-      console.log(alert); 
       setTimeout(function(){ setAlert({
         message: '', 
         classes: ''
@@ -76,10 +78,11 @@ function PlantList(props) {
         return <p>You next watering is tomorrow.</p>
       }
        else { 
-       return <p>Your next watering is in ${props.num.toString()} days.</p>
+       return <p>Your next watering is in {props.num.toString()} days.</p>
       }
     }; 
-    console.log(rendered); 
+    
+    
 
     return (
       <div>
@@ -98,13 +101,23 @@ function PlantList(props) {
           rendered.map((doc, ind) => 
             <div key={ind} value={doc}>
           <img src={doc.photo} alt="" width="500" height="500" />
-          <p>name: {doc.name}
-            , species: {doc.species}, 
-            notes: {doc.notes}, 
-            last watered on {doc.lastwatered}; 
+          <p>{doc.name} </p>
+          <p>
+            last watered on {doc.lastwatered}
           </p>
+            {(doc.species !== '') ? (
+              <p>
+                species: {doc.species} </p>
+            ) : (null)}
+            {(doc.notes !== '') ? (
+              <p>
+                additional notes: {doc.notes}
+              </p>
+            ): (null)}
+       
+          
           <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
-          <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} /> 
+          <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} index={ind} /> 
                </div>)
 
         )}

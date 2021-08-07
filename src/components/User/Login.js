@@ -13,9 +13,8 @@ const Login = () => {
   const [hasAccount, setHasAccount] = useState(true); 
   const [emailError, setEmailError] = useState(''); 
   const [passwordError, setPasswordError] = useState(''); 
-  //const [Feed, setFeed] = useState(''); 
-  const rendered = []; 
-
+  const [errClass, setErrClass] = useState(''); 
+  const rendered = [0]; 
 
   const emailHandler = (event) => { 
     setEmail(event.target.value); 
@@ -27,9 +26,13 @@ const Login = () => {
     setEmailError(''); 
     setPasswordError(''); 
   };
- // const clearInput = () => { 
-   // setPassword(''); 
- // }; 
+  const clearFields = () => { 
+    setEmail(''); 
+    setHasAccount(true); 
+    setEmailError(''); 
+    setPassword(''); 
+    setErrClass(''); 
+   }; 
 
   const LoginHandler = (event) => {
     event.preventDefault(); 
@@ -39,17 +42,21 @@ const Login = () => {
         switch(error.code) { 
           case "auth/invalid-email":
           case "auth/user-not-found":
+            setErrClass('error'); 
             setEmailError(error.message); 
             break; 
           case "auth/wrong-password":
+            setErrClass('error'); 
             setPasswordError(error.message);
+            setPassword(''); 
             break;
-          default: 
-            
-
+          default:
         }
+
     });  
   };
+
+
 
   const RegistrationHandler = (event) => {
     event.preventDefault(); 
@@ -60,9 +67,11 @@ const Login = () => {
           case "auth/invalid-email":
           case "auth/email-already-in-use":
             setEmailError(error.message); 
+            setErrClass('error'); 
             break; 
           case "auth/weak-password":
             setPasswordError(error.message);
+            setErrClass('error');  
             break;
           default:
             authListener(); 
@@ -72,49 +81,54 @@ const Login = () => {
   };
 
 
+
   const LogoutHandler = () => { 
     fire.auth().signOut().then(() => {
-      ReactDOM.unmountComponentAtNode(document.getElementById("home")); 
-      authListener(); 
+        clearFields(); 
+        let sz = rendered.length; 
+        rendered.splice(0, sz); 
+        rendered.push(0); 
+      ReactDOM.unmountComponentAtNode(document.getElementById("plantlist")); 
     })
   };
 
   const authListener = () => { 
     fire.auth().onAuthStateChanged(user => { 
-        if(user) { 
-          setCurrentUser(user); 
-          GetFeed(); 
-          console.log(currentUser);
-        } else { 
-          setCurrentUser(""); 
+      if(user) { 
+        if (user.uid !== currentUser.uid) { 
+           const use = user;
+          setCurrentUser(use);
+          GetFeed(user.uid); 
         }
-    })
+         
+      } else { 
+        if ('' !== currentUser) { 
+          setCurrentUser(''); 
+        }
+        
+      }
+  })
   };
 
-  async function GetFeed() { 
-    var user = db.collection('users').doc(currentUser.uid); 
+  async function GetFeed(id) { 
+  //  ReactDOM.unmountComponentAtNode(document.getElementById("home")); 
+    var user = db.collection('users').doc(id); 
       await user.collection('plants').get().then(snapshot => { 
        if (!snapshot.empty) {  
+          rendered.splice(0, rendered.length); 
           snapshot.forEach(plant => {
               let doc = plant.data(); 
               const msec = Date.parse(doc.lastwatered) + (doc.wateringfrequency * 86400000); 
               const offset = new Date().getTimezoneOffset() * 60000; 
               let nextwater = (Math.ceil(( (msec) - (Date.now()) + offset) / 86400000)); 
-              console.log(nextwater); 
               doc = { 
                 ...doc, 
                 nextwatering: nextwater
               }
               rendered.push(doc); 
-          }); 
-          ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#home")); 
-     //     console.log('element'); 
+          });     
        }
-       else { 
-        rendered.push(0);  
-        ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#home")); 
-
-       }
+       ReactDOM.render(React.createElement(PlantList, {rendered: rendered, LogoutHandler},  null), document.querySelector("#plantlist"));
 
         }
     ); 
@@ -122,48 +136,64 @@ const Login = () => {
 
   useEffect(() => {  
     authListener(); 
-    
   });
 
   const toggleSettings = () => { 
     setHasAccount(!hasAccount); 
+    colorHandler();
     clearErrors(); 
-
   }; 
+
+  const colorHandler = () => { 
+    setErrClass(''); 
+  }
   
+  function handleLogin() { 
+    if (currentUser.empty) { 
+      return (
+        <form>
+        <div className="login-style">
+          <label>Email</label>
+          <input type="email" id="username" className={errClass} onChange={emailHandler} onFocus={colorHandler} required/>
+          <label>Password</label>
+          <input type="password" id="pass" className={errClass} onChange={passwordHandler} onFocus={colorHandler} required  />
+          <p className="errorMsg">{passwordError}{emailError}</p>
+          <div className="btnContainer">
+            {hasAccount ? (
+              <>
+              <button onClick={LoginHandler}>Sign In</button>
+              <p>Don't have an account? <span onClick={toggleSettings}>Sign up</span></p>
+              </> 
+            ) : (
+              <>
+              <button type="submit" onClick={RegistrationHandler}>Register</button>
+              <p>Already have an account? <span onClick={toggleSettings}>Sign In</span></p>
+              </> 
+            )}
+          </div>
+        </div>
+      </form>
+      ); 
+
+    } else { 
+      return (
+        <div>
+          Loading....
+        </div>
+      ); 
+
+    }
+ 
+  }
+
 
   return (
-       
       <div> 
         {currentUser ? ( 
-          <div></div> 
+          <div id="plantlist">
+          </div> 
         ) : 
-            (
-          <form>
-           
-          <div className="login-style">
-            <label>Email</label>
-            <input type="email" id="username" onChange={emailHandler}/>
-            <label>Password</label>
-            <input type="password" id="pass" onChange={passwordHandler} required value={enteredPassword}/>
-            <p className="errorMsg">{passwordError}{emailError}</p>
-            <div className="btnContainer">
-              {hasAccount ? (
-                <>
-                <button onClick={LoginHandler}>Sign In</button>
-                <p>Don't have an account? <span onClick={toggleSettings}>Sign up</span></p>
-                </> 
-              ) : (
-                <>
-                <button type="submit" onClick={RegistrationHandler}>Register</button>
-                <p>Already have an account? <span onClick={toggleSettings}>Sign In</span></p>
-                </> 
-              )}
-            </div>
-          </div>
-        </form>
-
-        )}
+            (handleLogin())}
       </div>
        
      

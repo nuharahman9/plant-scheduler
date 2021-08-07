@@ -6,7 +6,7 @@ import fire, { storage } from '../Firebase/config';
 
 const AddPlant = (props) => { 
   const [newPlant, setNewPlant] = useState({
-    id: '',
+    id: '', 
     name: '',
     species: '',
     lastwatered: '',
@@ -20,7 +20,6 @@ const AddPlant = (props) => {
     setNewPlant({
       ...newPlant, 
       name: e.target.value, 
-      id: props.size
     })
   }; 
   const speciesHandler = (e) => {
@@ -59,31 +58,32 @@ const AddPlant = (props) => {
   const clearFields = () => { 
     setNewPlant({
       name: '', 
+      id: '',
       species: '', 
       lastwatered: '', 
       nextwatering: '', 
       wateringfrequency: '',
       notes: '',
-      id: '',
       photo: ''
     }); 
     setFile(null); 
   }
 
   async function uploadPlant(prop) { 
+    let uid = fire.auth().currentUser.uid;
+    const user =  db.collection('users').doc(uid);
+    let newPlantRef = user.collection("plants").doc(); 
       const plant = { 
         wateringfrequency: newPlant.wateringfrequency, 
         photo: prop, 
         notes: newPlant.notes, 
         name: newPlant.name, 
-        id: newPlant.id, 
+        id: newPlantRef.id, 
         nextwatering: 0, 
         species: newPlant.species, 
         lastwatered: newPlant.lastwatered
-      }
-    let uid = fire.auth().currentUser.uid;
-    const user =  db.collection('users').doc(uid);
-    await user.collection('plants').doc(newPlant.id.toString()).set(plant).then(() => {
+      }; 
+    await newPlantRef.set(plant).then(() => {
      props.onNewPlant(plant); 
     });  
   

@@ -5,7 +5,7 @@ import fire, { storage } from '../Firebase/config';
 
 const EditPlant = (props) => {
   const [plant, setPlant] = useState({
-    id: props.current.id,
+    id: props.current.id, 
     name: props.current.name,
     species: props.current.species,
     lastWatered: props.current.lastwatered,
@@ -103,12 +103,13 @@ const EditPlant = (props) => {
   }
 
   async function deletePlant() { 
+    console.log('delete'); 
     const user =  db.collection('users').doc(uid); 
     await user.collection('plants').doc(props.current.id.toString()).delete().then(() => {
       if (url !== defaultImg) { 
         deleteImg(); 
       } 
-      props.onDelete(props.current.name); 
+      props.onDelete(props.current.id, props.current.name); 
   
       }); 
   };   
@@ -121,8 +122,8 @@ const EditPlant = (props) => {
         console.log(error); 
       }, 
       () => {
-        storage.ref().child(file.name).getDownloadURL().then( url => { //edit photo names to be set to uid + plant id, so photo can be overwritten 
-          uploadEdit(url);    //check if file is default.jpeg before deleting
+        storage.ref().child(file.name).getDownloadURL().then( url => {
+          uploadEdit(url);    
         })
       }
     )
@@ -133,7 +134,6 @@ const EditPlant = (props) => {
     const user =  db.collection('users').doc(uid);
     const plantRef = user.collection('plants').doc(plant.id.toString()); 
     const doc = { //make this more efficient?? 
-      id: plant.id, 
       name: plant.name, 
       species: plant.species, 
       lastwatered: plant.lastWatered, 
@@ -145,7 +145,7 @@ const EditPlant = (props) => {
 
     plantRef.set(doc, { merge: true }).then(() => {
       clearFields(); 
-      props.onEdit(doc); 
+      props.onEdit(doc, props.index); 
     }); 
      
   }

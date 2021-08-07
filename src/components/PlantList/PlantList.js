@@ -85,7 +85,7 @@ function PlantList(props) {
     
 
     return (
-      <div>
+      <div id="list">
         <div>
         <Navbar logoutHandler={props.LogoutHandler} length={rendered.length} changeState={addFeed}  /> 
         </div>

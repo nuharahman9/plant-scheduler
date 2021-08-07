@@ -116,7 +116,7 @@ const AddPlant = (props) => {
 
   return (  
     <Popup
-    trigger={<button className="button">+ new Plant </button>}
+    trigger={<button className="button">+ new plant </button>}
     modal>
     {close => (
       <div className="popup">

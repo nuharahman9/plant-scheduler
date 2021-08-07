@@ -1,6 +1,7 @@
 import Popup from 'reactjs-popup'; 
 import React, { useState } from 'react'; 
 import db from '../Firebase/db'; 
+import './PlantList.css'; 
 import fire, { storage } from '../Firebase/config'; 
 
 const EditPlant = (props) => {
@@ -153,7 +154,7 @@ const EditPlant = (props) => {
 
   return (  
     <Popup
-    trigger={<button className="button">Edit Info </button>}
+    trigger={<button className="button">edit info </button>}
     modal nested>
     {close => (
       <div className="popup">

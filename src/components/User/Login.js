@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom'; 
 import "firebase/auth"; 
 import fire from "../Firebase/config"; 
-import "./Login.css"; 
+import './Login.css'; 
 import db from '../Firebase/db'; 
 import PlantList from '../PlantList/PlantList';
 
@@ -89,6 +89,7 @@ const Login = () => {
         rendered.splice(0, sz); 
         rendered.push(0); 
       ReactDOM.unmountComponentAtNode(document.getElementById("plantlist")); 
+      setCurrentUser('');
     })
   };
 
@@ -149,25 +150,25 @@ const Login = () => {
   }
   
   function handleLogin() { 
-    if (currentUser.empty) { 
+    if (currentUser === '') { 
       return (
         <form>
-        <div className="login-style">
-          <label>Email</label>
+        <div className="login">
+          <label className="input-label">Email</label>
           <input type="email" id="username" className={errClass} onChange={emailHandler} onFocus={colorHandler} required/>
-          <label>Password</label>
+          <label className="input-label">Password</label>
           <input type="password" id="pass" className={errClass} onChange={passwordHandler} onFocus={colorHandler} required  />
           <p className="errorMsg">{passwordError}{emailError}</p>
           <div className="btnContainer">
             {hasAccount ? (
               <>
-              <button onClick={LoginHandler}>Sign In</button>
-              <p>Don't have an account? <span onClick={toggleSettings}>Sign up</span></p>
+              <button onClick={LoginHandler}>sign in</button>
+              <p>Don't have an account? <span onClick={toggleSettings} className="hover"><br/>Sign up</span></p>
               </> 
             ) : (
               <>
               <button type="submit" onClick={RegistrationHandler}>Register</button>
-              <p>Already have an account? <span onClick={toggleSettings}>Sign In</span></p>
+              <p>Already have an account? <span onClick={toggleSettings} className="hover">Sign In</span></p>
               </> 
             )}
           </div>
@@ -175,7 +176,8 @@ const Login = () => {
       </form>
       ); 
 
-    } else { 
+    }
+     else { 
       return (
         <div>
           Loading....

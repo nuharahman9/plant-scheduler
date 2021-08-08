@@ -42,7 +42,6 @@ button {
 
 
 button:hover { 
-  border: 2px solid green; 
   transition: 0.25s ease; 
   background-color: green;
   color: white; 

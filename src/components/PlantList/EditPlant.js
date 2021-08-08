@@ -159,7 +159,7 @@ const EditPlant = (props) => {
     modal nested>
     {close => (
       <div className="overlay">
-        <div className="box">
+        <div className="box" id="ext">
         <a className="close" onClick={ (e) => {
           e.preventDefault(); 
           clearFields(); 
@@ -167,26 +167,33 @@ const EditPlant = (props) => {
         }} href="/"> 
           &times;
         </a>
-      <div className="header">Edit {props.current.name} </div>
-        <div className="content">
+        <div>
+        <h1 className="header">edit {props.current.name.toLowerCase()} </h1>
           {" "}
-          <form onSubmit={(e) => { 
+          <form className="content" onSubmit={(e) => { 
             e.preventDefault();
              edit(); 
             close();
           } 
           }>
-            <input value={plant.name} id="name" onBlur={nameHandler}/>
-            <input value={plant.species} id="species" onBlur={speciesHandler}/>
-             <input type="date" value={plant.lastWatered} id="date" onBlur={dateHandler}/> 
-             <input type="number" value={plant.frequency} id="frequency" onBlur={frequencyHandler}/> 
-             <input value={plant.notes} id="notes" onBlur={notesHandler} /> 
-             <input type="file" placeholder="Upload Photo" value={plant.photo}  onBlur={fileHandler} />
-             <input type="checkbox" onClick={deleteHandler} id="deleted" name="deleted"/> 
+            <label htmlFor="edit-nm">Name: </label>
+            <input defaultValue={plant.name} id="edit-nm" className="fields" onChange={nameHandler}/> <br/> 
+            <label htmlFor="edit-spec">Species: </label>
+            <input defaultValue={plant.species} id="edit-spec" className="fields" onChange={speciesHandler}/>
+            <br/> 
+            <label htmlFor="edit-date">Last Watered: </label>
+             <input type="date" defaultValue={plant.lastWatered} className="fields" id="edit-date" onChange={dateHandler}/> <br/>
+             <label htmlFor="edit-freq">Watering Frequency: </label>
+             <input type="number" className="fields" defaultValue={plant.frequency} id="edit-freq" onChange={frequencyHandler}/> <br/>
+             <label htmlFor="edit-notes">Additional Notes: </label>
+             <textarea defaultValue={plant.notes} id="edit-notes" className="fields" onChange={notesHandler} /> <br/> 
+             <label htmlFor="edit-photo">Upload Photo:  </label>
+             <input type="file" placeholder="Upload Photo" value={plant.photo} id="edit-photo" onChange={fileHandler} /> <br/> <br/>
               <label htmlFor="deleted"> Delete Plant </label>
+              <input type="radio" onChange={deleteHandler} id="deleted" name="deleted" className="fields"/> 
              <p id="error">
              </p>
-             <button type="submit">Save Changes</button>
+             <button type="submit" id="save">save changes</button>
           </form>
         </div>
         </div>

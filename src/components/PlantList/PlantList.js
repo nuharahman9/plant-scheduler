@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
 import Navbar from '../Nav/navbar'; 
 import EditPlant from './EditPlant'; 
 
@@ -46,6 +46,7 @@ function PlantList(props) {
     
     function addFeed(data) { 
       rendered.push(data); 
+      console.log(data); 
       updateWatering(data, (rendered.length - 1)); 
       let props = { 
         classes: '', 
@@ -81,9 +82,15 @@ function PlantList(props) {
        return <p>Your next watering is in {props.num.toString()} days.</p>
       }
     }; 
+    function handleEmpty() { 
+      if (rendered[0] === 0 || rendered.empty) { 
+        return true; 
+      } else { 
+        return false; 
+      }
+    }
 
-    
-
+   
     return (
       <div>
         <div>
@@ -91,11 +98,10 @@ function PlantList(props) {
         </div>
         <p className={alert.classes} value={alert}>{alert.message}</p>
 
-      <div id="list">
-        {rendered[0] === 0 ? (
-          <p>
-            click '+ New plant' to get started. 
-          </p>
+      <div id="list" value={rendered}>
+        {handleEmpty() ? (
+          <p> Click New Plant to get started. </p>
+          
         ) : ( 
           rendered.map((doc, ind) => 
             <div key={ind} value={doc} className="card"> 

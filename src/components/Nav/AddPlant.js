@@ -110,7 +110,7 @@ const AddPlant = (props) => {
      if (file !== null) { 
        fileUpload(); 
      } else { 
-      let defaultImg = "https://firebasestorage.googleapis.com/v0/b/plant-scheduler.appspot.com/o/default.jpeg?alt=media&token=47cdb8dd-d74c-4100-9f30-f8647d10096e"; 
+      let defaultImg = "https://firebasestorage.googleapis.com/v0/b/plant-scheduler.appspot.com/o/default.gif?alt=media&token=ccfeb641-a758-4df3-a9ee-339f9f7b6f29"; 
        uploadPlant(defaultImg); 
      }
   }
@@ -122,7 +122,7 @@ const AddPlant = (props) => {
     {close => (
       <div className="overlay">
         <div className="box">
-        <a id="close" onClick={ (e) => {
+        <a className="close" onClick={ (e) => {
           e.preventDefault(); 
           clearFields(); 
           close(); 
@@ -138,22 +138,22 @@ const AddPlant = (props) => {
             close();
           } 
           }>
-            <label for="name"> Name: </label>
+            <label htmlFor="name"> Name: </label>
             <input placeholder="Name" id="name" className="fields" onBlur={nameHandler}/><br/>
-            <label for="species">Species: </label>
+            <label htmlFor="species">Species: </label>
             <input placeholder="Species" id="species" className="fields" onBlur={speciesHandler}/><br/>
-            <label for="date">The last day you watered it: </label>
+            <label htmlFor="date">The last day you watered it: </label>
              <input type="date" placeholder="Date last watered" id="date" className="fields" onChange={dateHandler} required/> <br/>
-             <label for="frequency">How often should we remind you?</label> <br/>
-             <label for="frequency">
+             <label htmlFor="frequency">How often should we remind you?</label> <br/>
+             <label htmlFor="frequency">
                Every 
                <input type="number" min="1" className="fields" id="frequency" onBlur={frequencyHandler} required/> 
                day(s).
              </label><br/>
-             <label for ="notes"> Anything else to remember? </label><br/>  
+             <label htmlFor ="notes"> Anything else to remember? </label><br/>  
               <textarea className="fields" id="notes" onBlur={notesHandler} />
               <br/>
-             <label for="photo"> Upload Icon </label>
+             <label htmlFor="photo"> Upload Icon </label>
               <input type="file" id="photo" onChange={fileHandler}/>
              <button type="submit">submit</button>
           </form>

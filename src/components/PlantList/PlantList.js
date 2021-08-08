@@ -4,6 +4,7 @@ import EditPlant from './EditPlant';
 
 function PlantList(props) {
     const [render, setRender] = useState(false); 
+    const [empty, setEmpty] = useState(false); 
     const [alert, setAlert] = useState({
       classes: '', 
       name: ''
@@ -24,6 +25,7 @@ function PlantList(props) {
     }
 
     function removeFeed(id, name) { 
+      console.log('remove feed'); 
       let props = {
         classes: '', 
         messages: name + " was successfully deleted."
@@ -32,19 +34,26 @@ function PlantList(props) {
       console.log(name); 
       let index = rendered.findIndex(i => i.id === id); 
       rendered.splice(index, 1); 
+      if (rendered.length === 0) { 
+        rendered.push(0); 
+        setEmpty(true); 
+      }
     }
 
     function editFeed(doc, index) {
       console.log(doc); 
       updateWatering(doc, index); 
       let props = { 
-        classes: '', 
+        classes: 'alert alert-success', 
         message: "Saved changes to " + doc.name + "."
       }
       triggerAlert(props); 
     }
     
     function addFeed(data) { 
+      if (rendered[0] === 0) {
+        rendered.splice(0, 1); 
+      }
       rendered.push(data); 
       console.log(data); 
       updateWatering(data, (rendered.length - 1)); 
@@ -53,6 +62,7 @@ function PlantList(props) {
         message: "Successfully added " + data.name + "."
       }
       triggerAlert(props); 
+      setEmpty(!empty); 
     }; 
 
     function triggerAlert(al) { 
@@ -82,13 +92,15 @@ function PlantList(props) {
        return <p>Your next watering is in {props.num.toString()} days.</p>
       }
     }; 
-    function handleEmpty() { 
+
+    useEffect(() => {
+      console.log('use effect'); 
       if (rendered[0] === 0 || rendered.empty) { 
-        return true; 
-      } else { 
-        return false; 
+        setEmpty(true); 
+      } else {
+        setEmpty(false); 
       }
-    }
+    }, [rendered]); 
 
    
     return (
@@ -98,18 +110,15 @@ function PlantList(props) {
         </div>
         <p className={alert.classes} value={alert}>{alert.message}</p>
 
-      <div id="list" value={rendered}>
-        {handleEmpty() ? (
-          <p> Click New Plant to get started. </p>
-          
-        ) : ( 
-          rendered.map((doc, ind) => 
+      <div id="list" value={empty}>
+        {!empty ? (
+            rendered.map((doc, ind) => 
             <div key={ind} value={doc} className="card"> 
-          <img src={doc.photo} alt="" width="500" height="500" className="photo"/>
-          <p>{doc.name} </p>
-          <p>
+            <img src={doc.photo} alt="" width="500" height="500" className="photo"/>
+            <p>{doc.name} </p>
+            <p>
             last watered on {doc.lastwatered}
-          </p>
+            </p>
             {(doc.species !== '') ? (
               <p>
                 species: {doc.species} </p>
@@ -119,15 +128,15 @@ function PlantList(props) {
                 additional notes: {doc.notes}
               </p>
             ): (null)}
+            <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
+            <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} index={ind} className="edit"/> 
+              </div>)
           
-          <WateringAlert num={parseInt(doc.nextwatering)} value={doc.nextwatering}></WateringAlert>
-          <EditPlant current={doc} onEdit={editFeed} onDelete={removeFeed} index={ind} className="edit"/> 
-               </div>)
-
+        ) : ( 
+          <p> Click New Plant to get started. </p>
         )}
  
       </div>
-
       </div>
       
     );

@@ -168,7 +168,7 @@ const EditPlant = (props) => {
           &times;
         </a>
         <div>
-        <h1 className="header">edit {props.current.name.toLowerCase()} </h1>
+        <h1 className="header">edit {props.current.name} </h1>
           {" "}
           <form className="content" onSubmit={(e) => { 
             e.preventDefault();

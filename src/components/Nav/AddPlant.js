@@ -1,6 +1,7 @@
 import Popup from 'reactjs-popup'; 
 import React, { useState } from 'react'; 
 import './popup.css'; 
+import './navbar.css'; 
 import db from '../Firebase/db'; 
 import fire, { storage } from '../Firebase/config'; 
 
@@ -116,34 +117,47 @@ const AddPlant = (props) => {
 
   return (  
     <Popup
-    trigger={<button className="button">+ new plant </button>}
+    trigger={<button className="navbutton">new plant</button>}
     modal>
     {close => (
-      <div className="popup">
-        <a className="close" onClick={ (e) => {
+      <div className="overlay">
+        <div className="box">
+        <a id="close" onClick={ (e) => {
           e.preventDefault(); 
           clearFields(); 
           close(); 
         }} href="/"> 
           &times;
         </a>
-        <div className="header">Add Plant</div>
-        <div className="content">
+        <div>
+          <h1 className="header">new plant</h1>
           {" "}
-          <form onSubmit={(e) => { 
+          <form className="content" onSubmit={(e) => { 
             e.preventDefault(); 
              addPlant(); 
             close();
           } 
           }>
-            <input placeholder="Name" id="name" onBlur={nameHandler}/>
-            <input placeholder="Species" id="species" onBlur={speciesHandler}/>
-             <input type="date" placeholder="Date last watered" id="date" onChange={dateHandler}/> 
-             <input type="number" placeholder="Watering frequency" id="frequency" onBlur={frequencyHandler}/> 
-             <input placeholder="notes" id="notes" onBlur={notesHandler} /> 
-              <input type="file" onChange={fileHandler}/>
-             <button type="submit">Submit</button>
+            <label for="name"> Name: </label>
+            <input placeholder="Name" id="name" className="fields" onBlur={nameHandler}/><br/>
+            <label for="species">Species: </label>
+            <input placeholder="Species" id="species" className="fields" onBlur={speciesHandler}/><br/>
+            <label for="date">The last day you watered it: </label>
+             <input type="date" placeholder="Date last watered" id="date" className="fields" onChange={dateHandler} required/> <br/>
+             <label for="frequency">How often should we remind you?</label> <br/>
+             <label for="frequency">
+               Every 
+               <input type="number" min="1" className="fields" id="frequency" onBlur={frequencyHandler} required/> 
+               day(s).
+             </label><br/>
+             <label for ="notes"> Anything else to remember? </label><br/>  
+              <textarea className="fields" id="notes" onBlur={notesHandler} />
+              <br/>
+             <label for="photo"> Upload Icon </label>
+              <input type="file" id="photo" onChange={fileHandler}/>
+             <button type="submit">submit</button>
           </form>
+        </div>
         </div>
       </div>
     )}

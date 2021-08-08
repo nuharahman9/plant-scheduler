@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Montserrat&display=swap'); 
+
+.main { 
+  color: #108150; 
+  padding: 0.5em 0em 0.25em 0em; 
+  font-family: 'Major Mono Display';
+  margin: 0 auto;
+  text-align: center;
+  font-size: 5em; 
+}

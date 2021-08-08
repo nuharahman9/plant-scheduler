@@ -81,7 +81,7 @@ function PlantList(props) {
        return <p>Your next watering is in {props.num.toString()} days.</p>
       }
     }; 
-    
+
     
 
     return (
@@ -99,7 +99,7 @@ function PlantList(props) {
         ) : ( 
           rendered.map((doc, ind) => 
             <div key={ind} value={doc} className="card"> 
-          <img src={doc.photo} alt="" width="500" height="500" />
+          <img src={doc.photo} alt="" width="500" height="500" className="photo"/>
           <p>{doc.name} </p>
           <p>
             last watered on {doc.lastwatered}

@@ -2,6 +2,7 @@ import Popup from 'reactjs-popup';
 import React, { useState } from 'react'; 
 import db from '../Firebase/db'; 
 import './PlantList.css'; 
+import '../Nav/popup.css'; 
 import fire, { storage } from '../Firebase/config'; 
 
 const EditPlant = (props) => {
@@ -17,7 +18,7 @@ const EditPlant = (props) => {
   const [file, setFile] = useState(null); 
   const [del, setDel] = useState(false); 
   let url = props.current.photo; 
-  const defaultImg = "https://firebasestorage.googleapis.com/v0/b/plant-scheduler.appspot.com/o/default.jpeg?alt=media&token=47cdb8dd-d74c-4100-9f30-f8647d10096e"; 
+  const defaultImg = "https://firebasestorage.googleapis.com/v0/b/plant-scheduler.appspot.com/o/default.gif?alt=media&token=ccfeb641-a758-4df3-a9ee-339f9f7b6f29"; 
   const uid = fire.auth().currentUser.uid;
 
   const nameHandler = (e) => {
@@ -157,7 +158,8 @@ const EditPlant = (props) => {
     trigger={<button className="edit">edit info </button>}
     modal nested>
     {close => (
-      <div className="popup">
+      <div className="overlay">
+        <div className="box">
         <a className="close" onClick={ (e) => {
           e.preventDefault(); 
           clearFields(); 
@@ -174,18 +176,19 @@ const EditPlant = (props) => {
             close();
           } 
           }>
-            <input defaultValue={plant.name} id="name" onBlur={nameHandler}/>
-            <input defaultValue={plant.species} id="species" onBlur={speciesHandler}/>
-             <input type="date" defaultValue={plant.lastWatered} id="date" onBlur={dateHandler}/> 
-             <input type="number" defaultValue={plant.frequency} id="frequency" onBlur={frequencyHandler}/> 
-             <input defaultValue={plant.notes} id="notes" onBlur={notesHandler} /> 
-             <input type="file" placeholder="Upload Photo"  onBlur={fileHandler} />
+            <input value={plant.name} id="name" onBlur={nameHandler}/>
+            <input value={plant.species} id="species" onBlur={speciesHandler}/>
+             <input type="date" value={plant.lastWatered} id="date" onBlur={dateHandler}/> 
+             <input type="number" value={plant.frequency} id="frequency" onBlur={frequencyHandler}/> 
+             <input value={plant.notes} id="notes" onBlur={notesHandler} /> 
+             <input type="file" placeholder="Upload Photo" value={plant.photo}  onBlur={fileHandler} />
              <input type="checkbox" onClick={deleteHandler} id="deleted" name="deleted"/> 
               <label htmlFor="deleted"> Delete Plant </label>
              <p id="error">
              </p>
              <button type="submit">Save Changes</button>
           </form>
+        </div>
         </div>
       </div>
     )}

@@ -6,17 +6,17 @@ import "firebase/storage";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const fire = firebase.initializeApp({
-  apiKey: "AIzaSyDBnwxstB5kqv2kftbHkPRqKxIKiYHSyyI",
-  authDomain: "plant-scheduler.firebaseapp.com",
-  projectId: "plant-scheduler",
-  storageBucket: "plant-scheduler.appspot.com",
-  messagingSenderId: "592683487390",
-  databaseURL: "https://plant-scheduler-default-rtdb.firebaseio.com/", 
-  appId: "1:592683487390:web:f66ef11e6259e6c21aeb8f",
-  measurementId: "G-WRDPGS0N38"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL, 
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 });
 
-export const auth = fire.auth(); //?
+export const auth = fire.auth(); 
 export const storage = firebase.storage(); 
 
 export default fire;  

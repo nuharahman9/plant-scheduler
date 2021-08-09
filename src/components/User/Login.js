@@ -13,7 +13,7 @@ const Login = () => {
   const [hasAccount, setHasAccount] = useState(true); 
   const [emailError, setEmailError] = useState(''); 
   const [passwordError, setPasswordError] = useState(''); 
-  const [errClass, setErrClass] = useState(''); 
+  const [errClass, setErrClass] = useState('not-auth'); 
   const rendered = [0]; 
 
   const emailHandler = (event) => { 
@@ -31,7 +31,7 @@ const Login = () => {
     setHasAccount(true); 
     setEmailError(''); 
     setPassword(''); 
-    setErrClass(''); 
+    setErrClass('not-auth'); 
    }; 
 
   const LoginHandler = (event) => {
@@ -42,11 +42,11 @@ const Login = () => {
         switch(error.code) { 
           case "auth/invalid-email":
           case "auth/user-not-found":
-            setErrClass('error'); 
+            setErrClass('not-auth error'); 
             setEmailError(error.message); 
             break; 
           case "auth/wrong-password":
-            setErrClass('error'); 
+            setErrClass('not-auth error'); 
             setPasswordError(error.message);
             setPassword(''); 
             break;
@@ -67,11 +67,11 @@ const Login = () => {
           case "auth/invalid-email":
           case "auth/email-already-in-use":
             setEmailError(error.message); 
-            setErrClass('error'); 
+            setErrClass('not-auth error'); 
             break; 
           case "auth/weak-password":
             setPasswordError(error.message);
-            setErrClass('error');  
+            setErrClass('not-auth error');  
             break;
           default:
             authListener(); 
@@ -104,7 +104,7 @@ const Login = () => {
          
       } else { 
         if ('' !== currentUser) { 
-          setCurrentUser(''); 
+          setCurrentUser('');
         }
         
       }
@@ -112,7 +112,6 @@ const Login = () => {
   };
 
   async function GetFeed(id) { 
-  //  ReactDOM.unmountComponentAtNode(document.getElementById("home")); 
     var user = db.collection('users').doc(id); 
       await user.collection('plants').get().then(snapshot => { 
        if (!snapshot.empty) {  
@@ -146,7 +145,7 @@ const Login = () => {
   }; 
 
   const colorHandler = () => { 
-    setErrClass(''); 
+    setErrClass('not-auth'); 
   }
   
   function handleLogin() { 
@@ -162,14 +161,14 @@ const Login = () => {
           <div className="btnContainer">
             {hasAccount ? (
               <>
-              <button onClick={LoginHandler}>sign in</button>
+              <button onClick={LoginHandler} className='login-reg'>sign in</button>
               <p>Don't have an account? <span onClick={toggleSettings} className="hover"><br/>Sign up</span></p>
               </> 
             ) : (
               <>
-              <button type="submit" onClick={RegistrationHandler}>Register</button>
-              <p>Already have an account? <span onClick={toggleSettings} className="hover">Sign In</span></p>
-              </> 
+              <button type="submit" className='login-reg' onClick={RegistrationHandler}>Register</button>
+              <p>Already have an account? <br/> <span onClick={toggleSettings} className="hover">Sign In</span></p>
+              </>
             )}
           </div>
         </div>

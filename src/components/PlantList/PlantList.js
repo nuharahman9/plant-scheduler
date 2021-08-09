@@ -15,7 +15,6 @@ function PlantList(props) {
         const msec = Date.parse(doc.lastwatered) + (doc.wateringfrequency * 86400000); 
         const offset = new Date().getTimezoneOffset() * 60000; 
         let nextwater = (Math.ceil(( (msec) - (Date.now()) + offset) / 86400000)); 
-        console.log(nextwater); 
         doc = { 
           ...doc, 
           nextwatering: nextwater
@@ -25,26 +24,25 @@ function PlantList(props) {
     }
 
     function removeFeed(id, name) { 
-      console.log('remove feed'); 
       let props = {
-        classes: '', 
+        classes: 'alert', 
         messages: name + " was successfully deleted."
       }; 
       triggerAlert(props); 
-      console.log(name); 
       let index = rendered.findIndex(i => i.id === id); 
       rendered.splice(index, 1); 
       if (rendered.length === 0) { 
         rendered.push(0); 
         setEmpty(true); 
+      } else {
+        setEmpty(false); 
       }
     }
 
     function editFeed(doc, index) {
-      console.log(doc); 
       updateWatering(doc, index); 
       let props = { 
-        classes: 'alert alert-success', 
+        classes: 'alert', 
         message: "Saved changes to " + doc.name + "."
       }
       triggerAlert(props); 
@@ -55,18 +53,16 @@ function PlantList(props) {
         rendered.splice(0, 1); 
       }
       rendered.push(data); 
-      console.log(data); 
       updateWatering(data, (rendered.length - 1)); 
       let props = { 
-        classes: '', 
+        classes: 'alert', 
         message: "Successfully added " + data.name + "."
       }
       triggerAlert(props); 
-      setEmpty(!empty); 
+      setEmpty(false); 
     }; 
 
     function triggerAlert(al) { 
-      console.log('alert'); 
       if (al) {
         setAlert({
           message: al.message, 
@@ -94,7 +90,6 @@ function PlantList(props) {
     }; 
 
     useEffect(() => {
-      console.log('use effect'); 
       if (rendered[0] === 0 || rendered.empty) { 
         setEmpty(true); 
       } else {
@@ -133,7 +128,7 @@ function PlantList(props) {
               </div>)
           
         ) : ( 
-          <p> Click New Plant to get started. </p>
+          <h1 className="new-plant"> click 'neW plAnt' to Get started. </h1>
         )}
  
       </div>

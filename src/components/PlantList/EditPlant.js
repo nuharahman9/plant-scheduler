@@ -105,7 +105,6 @@ const EditPlant = (props) => {
   }
 
   async function deletePlant() { 
-    console.log('delete'); 
     const user =  db.collection('users').doc(uid); 
     await user.collection('plants').doc(props.current.id.toString()).delete().then(() => {
       if (url !== defaultImg) { 

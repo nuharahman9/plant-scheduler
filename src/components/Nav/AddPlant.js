@@ -95,7 +95,6 @@ const AddPlant = (props) => {
     uploadTask.on('state_changed',  
       snapshot => {}, 
       (error) => {
-        console.log(error); 
       }, 
       () => {
         storage.ref().child(file.name).getDownloadURL().then( url => {
@@ -139,7 +138,7 @@ const AddPlant = (props) => {
           } 
           }>
             <label htmlFor="name"> Name: </label>
-            <input placeholder="Name" id="name" className="fields" onBlur={nameHandler}/><br/>
+            <input placeholder="Name" id="name" className="fields" onChange={nameHandler} required/><br/>
             <label htmlFor="species">Species: </label>
             <input placeholder="Species" id="species" className="fields" onBlur={speciesHandler}/><br/>
             <label htmlFor="date">The last day you watered it: </label>

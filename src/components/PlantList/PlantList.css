@@ -36,3 +36,21 @@
   max-height: 400px;
   border-radius: 5px; 
 }
+
+
+.alert { 
+  text-align: center; 
+  font-family: 'Montserrat'; 
+  color: green; 
+}
+
+.new-plant {
+  font-size: 50px; 
+  font-family: 'Major Mono Display'; 
+  text-align: center; 
+  color: #6a4d3e; 
+}
+
+
+
+
